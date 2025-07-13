@@ -1,13 +1,18 @@
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
+import { type ChangeEvent, type FC, type FormEvent, useState } from 'react'
+import axios from 'axios'
 import Input from '../components/Input'
 import { Button } from '../components/Button'
+import { useNavigate } from 'react-router-dom'
 
 interface LoginForm {
   username: string
   password: string
 }
 
-const Login: FC = () => {
+export const Login: FC = () => {
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<LoginForm>({ username: '', password: '' })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -15,35 +20,26 @@ const Login: FC = () => {
     setForm(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('Login data:', form)
+    try {
+      const res = await axios.post('http://localhost:3000/api/signin', form)
+      const token = res.data.token
+      localStorage.setItem('token', token);
+      console.log('Login successful, token saved.')
+      
+      navigate("/dashboard");
+      
+    } catch (err) {
+      console.error('Login failed:', err)
+    }
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f7f7f7'
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '400px',
-          width: '100%',
-          backgroundColor: '#fff',
-          padding: '2rem',
-          borderRadius: '8px',
-          boxShadow: '0 0 10px rgba(0,0,0,0.1)'
-        }}
-      >
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' }}>
-          Log in to your account
-        </h2>
-        <form onSubmit={handleSubmit}>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Log in to your account</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Username"
             name="username"
@@ -59,9 +55,8 @@ const Login: FC = () => {
             onChange={handleChange}
             placeholder="Enter your password"
           />
-          <div style={{ width: '100%' }}>
+          <div className="pt-2">
             <Button
-              type="submit"
               size="md"
               variant="primary"
               text="Sign In"
@@ -73,4 +68,4 @@ const Login: FC = () => {
   )
 }
 
-export default Login
+

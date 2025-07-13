@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { PlusIcon } from "../icons/PlusIcon";
+import { Button } from "./Button";
 
 interface BatchPopupProps {
   productId: string;
@@ -43,12 +44,10 @@ export function BatchPopup({ productId, onClose }: BatchPopupProps) {
       <div className="bg-white rounded-l shadow-lg w-[700px] max-h-[80vh] overflow-hidden py-3">
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold text-gray-800">Batch Information</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-black text-xl font-bold"
-          >
-            <PlusIcon />
-          </button>
+		  <div className="flex gap-2">
+			<Button size="sm" variant="primary" text="Restock" />
+          	<Button size="sm" variant="secondary" onClick={onClose} startIcon={<PlusIcon />} text=""/>
+		  </div>
         </div>
 
         {loading ? (

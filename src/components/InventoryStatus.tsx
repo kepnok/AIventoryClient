@@ -20,7 +20,7 @@ export function InventoryStatus() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get("http://localhost:3000/api/products/withQuantity", {
+        const res = await axios.get("http://localhost:3000/api/totalProducts", {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },

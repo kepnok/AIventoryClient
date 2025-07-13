@@ -1,15 +1,19 @@
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react'
+import { type ChangeEvent, type FC, type FormEvent, useState } from 'react'
+import axios from 'axios'
 import Input from '../components/Input'
 import { Button } from '../components/Button'
+import { useNavigate } from 'react-router-dom';
 
 interface SignupForm {
-  username: string
-  password: string
-  email: string
-  warehouseId: string
+  username: string;
+  password: string;
+  email: string;
+  warehouseId: string;
 }
 
-const Signup: FC = () => {
+export const Signup: FC = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<SignupForm>({
     username: '',
     password: '',
@@ -18,39 +22,35 @@ const Signup: FC = () => {
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setForm(prev => ({ ...prev, [name]: value }))
-  }
+  const { name, value } = e.target;
 
-  const handleSubmit = (e: FormEvent) => {
+  setForm(prev => ({
+    ...prev,
+    [name]: name === "warehouseId" ? Number(value) : value
+  }));
+};
+
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('Signup data:', form)
+    try {
+      const res = await axios.post('http://localhost:3000/api/signup', form)
+      console.log('Signup successful:', res.data)
+      alert("signed up scuessfully");
+
+      navigate("/signin");
+      
+    } catch (err) {
+      console.error('Signup failed:', err)
+      alert("signup failed")
+    }
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f7f7f7'
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '400px',
-          width: '100%',
-          backgroundColor: '#fff',
-          padding: '2rem',
-          borderRadius: '8px',
-          boxShadow: '0 0 10px rgba(0,0,0,0.1)'
-        }}
-      >
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' }}>
-          Create an account
-        </h2>
-        <form onSubmit={handleSubmit}>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Create an account</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Username"
             name="username"
@@ -81,11 +81,12 @@ const Signup: FC = () => {
             onChange={handleChange}
             placeholder="Enter warehouse ID"
           />
-          <Button type="submit" size="md" variant="primary" text="Sign Up" />
+          <div className="pt-2">
+            <Button size="md" variant="primary" text="Sign Up" />
+          </div>
         </form>
       </div>
     </div>
   )
 }
 
-export default Signup

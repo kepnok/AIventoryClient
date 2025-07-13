@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC } from 'react'
+import { type ChangeEvent, type FC } from 'react'
 
 interface InputProps {
   label?: string

@@ -4,7 +4,7 @@ import { DashboardIcon } from "../icons/DashboardIcon";
 import { ChatIcon } from "../icons/ChatIcon";
 
 export function Sidebar() {
-//  const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="w-60 min-h-screen bg-white shadow-md p-6 flex flex-col">
@@ -14,12 +14,12 @@ export function Sidebar() {
         <SidebarItem
           text="Dashboard"
 		  icon={<DashboardIcon />}
-         // onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/dashboard")}
         />
         <SidebarItem
           text="Chat"
 		  icon={<ChatIcon />}
-          //onClick={() => navigate("/chat")}
+          onClick={() => navigate("/chat")}
         />
       </div>
     </div>
