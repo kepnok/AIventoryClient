@@ -9,7 +9,7 @@ interface ButtonProps {
 }
 
 const variant = {
-	"primary": "bg-blue-600 hover:bg-blue-400 text-white",
+	"primary": "bg-blue-600 hover:bg-blue-400 text-white border-2 border-blue-600 hover:border-blue-400",
 	"secondary": "bg-white bg-gray-100 text-gray-500 hover:text-gray-300 border-2 border-gray-300"
 }
 
