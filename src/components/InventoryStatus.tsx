@@ -46,7 +46,7 @@ export function InventoryStatus() {
           ...stockCount,
         });
       } catch (err) {
-        console.error("Error fetching inventory summary", err);
+        console.error("Error fetching inventory status", err);
       }
     }
 

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Items } from "./Items"; 
+import { Items } from "./Items";
 import { Button } from "./Button";
-
+import { FilterIcon } from "../icons/FilterIcon";
+import { BatchPopup } from "./BatchPopup";
 
 interface Product {
+  id: string;
   name: string;
   sku: string;
   quantity: number;
@@ -15,11 +17,12 @@ export function ProductList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await axios.get("http://localhost:3000/api/products/withQuantity", {
+        const res = await axios.get("http://localhost:3000/api/totalProducts/", {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -33,13 +36,12 @@ export function ProductList() {
         setLoading(false);
       }
     }
-    console.log(products);
 
     fetchProducts();
   }, []);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 mt-4">
+    <div className="bg-white rounded-xl shadow-sm p-6 mt-4 relative">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800">Products</h2>
         <div className="flex gap-2">
@@ -47,13 +49,13 @@ export function ProductList() {
             text="Add Product"
             variant="primary"
             size="sm"
-           
             onClick={() => console.log("Add product clicked")}
           />
           <Button
             text="Filters"
             variant="secondary"
             size="sm"
+            startIcon={<FilterIcon />}
             onClick={() => console.log("Filter clicked")}
           />
         </div>
@@ -75,14 +77,26 @@ export function ProductList() {
         <div className="text-gray-500 text-sm px-4 py-4">No products found.</div>
       ) : (
         products.map((product) => (
-          <Items
-            key={product.sku}
-            productName={product.name}
-            sku={product.sku}
-            quantity={product.quantity}
-            restockLevel={product.restockLevel}
-          />
+          <div
+            key={product.id}
+            onClick={() => setSelectedProductId(product.id)}
+            className="cursor-pointer hover:bg-gray-50"
+          >
+            <Items
+              productName={product.name}
+              sku={product.sku}
+              quantity={product.quantity}
+              restockLevel={product.restockLevel}
+            />
+          </div>
         ))
+      )}
+
+      {selectedProductId !== null && (
+        <BatchPopup
+          productId={selectedProductId}
+          onClose={() => setSelectedProductId(null)}
+        />
       )}
     </div>
   );
