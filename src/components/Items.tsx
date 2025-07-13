@@ -16,7 +16,7 @@ export function Items(props: ItemProps) {
 
   return (
     <div className="grid grid-cols-5 gap-4 py-2 px-4 border-b text-sm items-center">
-      <div >{props.productName}</div>
+      <div>{props.productName}</div>
       <div>{props.sku}</div>
       <div>{props.quantity} units</div>
       <div>{props.restockLevel} units</div>
