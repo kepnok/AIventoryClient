@@ -1,14 +1,10 @@
+import { getAvailability } from "../utils/getAvailablity";
+
 interface ItemProps {
   productName: string;
   sku: string;
   quantity: number;
   restockLevel: number;
-}
-
-function getAvailability(quantity: number, restockLevel: number): string {
-  if (quantity === 0) return "out-of-stock";
-  if (quantity < restockLevel) return "low-stock";
-  return "in-stock";
 }
 
 export function Items(props: ItemProps) {
